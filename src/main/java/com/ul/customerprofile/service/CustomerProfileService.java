@@ -28,8 +28,8 @@ public class CustomerProfileService {
         return repository.findByEmail(email)
                 .filter(customer -> {
                     System.out.println("🔍 Checking login for email: " + email);
-                    System.out.println("✅ Database password: " + customer.getPassword());
-                    System.out.println("✅ Entered password: " + password);
+                    System.out.println("✅ Database password is: " + customer.getPassword());
+                    System.out.println("✅ Entered password is: " + password);
                     return customer.getPassword().equals(password);
                 });
     }
