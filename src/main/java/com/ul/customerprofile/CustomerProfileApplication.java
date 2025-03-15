@@ -25,7 +25,7 @@ public class CustomerProfileApplication {
     CommandLineRunner initDatabase(CustomerProfileRepository repository, TourRepository tourRepository) {
         return args -> {
             // Add default admin user (if not already present)
-            if (repository.findByEmail("admin@example.com").isEmpty()) {
+            if (repository.findByEmail("admin@gmail.com").isEmpty()) {
                 Map<String, String> preferences = new HashMap<>();
                 preferences.put("theme", "light");
                 preferences.put("notifications", "email");
@@ -38,12 +38,15 @@ public class CustomerProfileApplication {
                 System.out.println("✅ Default admin user created: admin@gmail.com / admin123");
             }
 
-            // Add sample tour data
-            tourRepository.save(new Tour(null, 1L, "Paris", LocalDate.of(2025, 4, 1), LocalDate.of(2025, 4, 7), "Upcoming", 1200.0, LocalDate.of(2025, 3, 1)));
-            tourRepository.save(new Tour(null, 1L, "Tokyo", LocalDate.of(2025, 5, 15), LocalDate.of(2025, 5, 22), "Upcoming", 1500.0, LocalDate.of(2025, 3, 10)));
-            tourRepository.save(new Tour(null, 1L, "New York", LocalDate.of(2024, 12, 10), LocalDate.of(2024, 12, 17), "Completed", 1000.0, LocalDate.of(2024, 11, 1)));
+            if (tourRepository.count() == 0) {
+                tourRepository.save(new Tour(null, 1L, "Paris", LocalDate.of(2025, 4, 1), LocalDate.of(2025, 4, 7), "Upcoming", 1200.0, LocalDate.of(2025, 3, 1)));
+                tourRepository.save(new Tour(null, 1L, "Tokyo", LocalDate.of(2025, 5, 15), LocalDate.of(2025, 5, 22), "Upcoming", 1500.0, LocalDate.of(2025, 3, 10)));
+                tourRepository.save(new Tour(null, 1L, "New York", LocalDate.of(2024, 12, 10), LocalDate.of(2024, 12, 17), "Completed", 1000.0, LocalDate.of(2024, 11, 1)));
 
-            System.out.println("✅ Sample tour data added.");
+                System.out.println("✅ Sample tour data added.");
+            } else {
+                System.out.println("✅ Sample tour data already exists");
+            }
         };
     }
 }

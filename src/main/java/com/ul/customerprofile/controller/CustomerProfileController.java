@@ -41,9 +41,19 @@ public class CustomerProfileController {
         return profile.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    //@PostMapping
+    //public CustomerProfile createProfile(@RequestBody CustomerProfile profile) {
+    //    return service.createProfile(profile);
+    //}
+    
     @PostMapping
-    public CustomerProfile createProfile(@RequestBody CustomerProfile profile) {
-        return service.createProfile(profile);
+    public ResponseEntity<?> createProfile(@RequestBody CustomerProfile profile) {
+        try {
+            CustomerProfile savedProfile = service.createProfile(profile);
+            return ResponseEntity.ok(savedProfile);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
     
     @PutMapping("/{id}")

@@ -13,7 +13,7 @@ public class CustomerProfileService {
     private CustomerProfileRepository repository;
 
     public List<CustomerProfile> getAllProfiles() {
-        return repository.findAll();
+        return repository.findAll(); 
     }
 
     public Optional<CustomerProfile> getProfileById(Long id) {
@@ -21,15 +21,19 @@ public class CustomerProfileService {
     }
 
     public CustomerProfile createProfile(CustomerProfile profile) {
+        // Check if email already exists
+        if (repository.findByEmail(profile.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists");
+        }
         return repository.save(profile);
     }
 
     public Optional<CustomerProfile> login(String email, String password) {
         return repository.findByEmail(email)
                 .filter(customer -> {
-                    System.out.println("🔍 Checking login for email: " + email);
-                    System.out.println("✅ Database password is: " + customer.getPassword());
-                    System.out.println("✅ Entered password is: " + password);
+                    System.out.println("🔍 Check login for email: " + email);
+                    System.out.println("✅ Database password: " + customer.getPassword());
+                    System.out.println("✅ Entered password: " + password);
                     return customer.getPassword().equals(password);
                 });
     }
