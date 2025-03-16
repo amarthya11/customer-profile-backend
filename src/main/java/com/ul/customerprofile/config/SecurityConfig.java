@@ -25,23 +25,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() // Disable CSRF protection (add this line)
-            .cors().and() // Enable CORS
+            .csrf().disable()
+            .cors().and() 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow OPTIONS requests for preflight
-                .requestMatchers("/api/customers/login").permitAll() // Allow unauthenticated access to /login
-                .requestMatchers("/api/customers/**").authenticated() // Secure all other /api/customers endpoints
-                .anyRequest().permitAll() // Allow all other requests
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/api/customers/login").permitAll() 
+                .requestMatchers("/api/customers/**").authenticated()
+                .anyRequest().permitAll()
             )
-            .httpBasic(withDefaults()); // Enable Basic Authentication for other endpoints
+            .httpBasic(withDefaults()); // this enables Basic Authentication for other endpoints
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder()
-            .username("user") // Hardcoded username
-            .password("password") // Hardcoded password
+            .username("user") 
+            .password("password") 
             .roles("USER")
             .build();
         return new InMemoryUserDetailsManager(user);
@@ -50,12 +50,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Allow your frontend domain
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow necessary HTTP methods
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Allow necessary headers
-        configuration.setAllowCredentials(true); // Allow credentials (e.g., cookies)
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // allows the frontend domain
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // allows the necessary HTTP methods
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // allows the necessary headers
+        configuration.setAllowCredentials(true); // allows the credentials (e.g., cookies)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Apply CORS configuration to all endpoints
+        source.registerCorsConfiguration("/**", configuration); // applying CORS configuration to all endpoints
         return source;
     }
 }

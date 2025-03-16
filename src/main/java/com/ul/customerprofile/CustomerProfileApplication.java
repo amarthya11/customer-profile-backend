@@ -24,7 +24,6 @@ public class CustomerProfileApplication {
     @Bean
     CommandLineRunner initDatabase(CustomerProfileRepository repository, TourRepository tourRepository) {
         return args -> {
-            // Add default admin user (if not already present)
             if (repository.findByEmail("admin@gmail.com").isEmpty()) {
                 Map<String, String> preferences = new HashMap<>();
                 preferences.put("theme", "light");
@@ -35,7 +34,7 @@ public class CustomerProfileApplication {
                 );
 
                 repository.save(admin);
-                System.out.println("✅ Default admin user created: admin@gmail.com / admin123");
+                System.out.println("Default admin user created: admin@gmail.com / admin123");
             }
 
             if (tourRepository.count() == 0) {
@@ -43,9 +42,9 @@ public class CustomerProfileApplication {
                 tourRepository.save(new Tour(null, 1L, "Tokyo", LocalDate.of(2025, 5, 15), LocalDate.of(2025, 5, 22), "Upcoming", 1500.0, LocalDate.of(2025, 3, 10)));
                 tourRepository.save(new Tour(null, 1L, "New York", LocalDate.of(2024, 12, 10), LocalDate.of(2024, 12, 17), "Completed", 1000.0, LocalDate.of(2024, 11, 1)));
 
-                System.out.println("✅ Sample tour data added.");
+                System.out.println("Sample tour data added.");
             } else {
-                System.out.println("✅ Sample tour data already exists");
+                System.out.println("Sample tour data already exists");
             }
         };
     }

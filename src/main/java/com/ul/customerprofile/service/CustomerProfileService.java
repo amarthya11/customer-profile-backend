@@ -21,7 +21,7 @@ public class CustomerProfileService {
     }
 
     public CustomerProfile createProfile(CustomerProfile profile) {
-        // Check if email already exists
+        //checking if the email already exists
         if (repository.findByEmail(profile.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
@@ -31,9 +31,9 @@ public class CustomerProfileService {
     public Optional<CustomerProfile> login(String email, String password) {
         return repository.findByEmail(email)
                 .filter(customer -> {
-                    System.out.println("🔍 Check login for email: " + email);
-                    System.out.println("✅ Database password: " + customer.getPassword());
-                    System.out.println("✅ Entered password: " + password);
+                    System.out.println("Check login for email: " + email);
+                    System.out.println("Database password: " + customer.getPassword());
+                    System.out.println("Entered password: " + password);
                     return customer.getPassword().equals(password);
                 });
     }

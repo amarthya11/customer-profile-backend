@@ -25,9 +25,7 @@ public class CustomerProfilePictureController {
     @Autowired
     private CustomerProfileRepository repository;
 
-    /** ✅ Upload Profile Picture API **/
-    
-
+    //API to upload profile picture
     @PostMapping("/{id}/upload-profile-picture")
     public ResponseEntity<String> uploadProfilePicture(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         Optional<CustomerProfile> customer = repository.findById(id);
@@ -36,44 +34,40 @@ public class CustomerProfilePictureController {
         }
 
         try {
-            // ✅ Use an absolute path for the uploads directory
             String uploadDir = System.getProperty("user.dir") + "/uploads/";
             File uploadDirFile = new File(uploadDir);
             if (!uploadDirFile.exists()) {
-                uploadDirFile.mkdirs(); // Create the directory if it doesn't exist
+                uploadDirFile.mkdirs();
             }
 
-            // ✅ Generate unique file name and encode it
             String fileName = id + "_" + System.currentTimeMillis() + "_" + URLEncoder.encode(file.getOriginalFilename(), StandardCharsets.UTF_8.toString());
             Path filePath = Paths.get(uploadDir, fileName);
 
-            // ✅ Save the file to the uploads directory
             file.transferTo(filePath.toFile());
 
-            // ✅ Save correct URL to database
             CustomerProfile profile = customer.get();
             profile.setProfilePictureUrl("/uploads/" + fileName);
-            repository.save(profile); // ✅ Save changes to database
+            repository.save(profile);
 
-            System.out.println("✅ File uploaded successfully: " + filePath); // Debugging
-            return ResponseEntity.ok("/uploads/" + fileName); // ✅ Return correct URL
+            System.out.println("File uploaded successfully: " + filePath); // Debugging
+            return ResponseEntity.ok("/uploads/" + fileName);
         } catch (IOException e) {
-            System.err.println("❌ Error uploading file: " + e.getMessage()); // Debugging
+            System.err.println("Error uploading file: " + e.getMessage()); // Debugging
             return ResponseEntity.internalServerError().body("Error uploading file: " + e.getMessage());
         }
     }
     
-    /** ✅ Retrieve Profile Picture URL API **/
+    //API to retrieve profile picture URL
     @GetMapping("/{id}/profile-picture")
     public ResponseEntity<String> getProfilePictureUrl(@PathVariable Long id) {
         Optional<CustomerProfile> customer = repository.findById(id);
         if (customer.isPresent() && customer.get().getProfilePictureUrl() != null) {
-            return ResponseEntity.ok(customer.get().getProfilePictureUrl()); // ✅ Return stored URL
+            return ResponseEntity.ok(customer.get().getProfilePictureUrl());
         }
         return ResponseEntity.notFound().build();
     }
 
-    /** ✅ Remove Profile Picture API **/
+    //API to remove profile picture
     @DeleteMapping("/{id}/remove-profile-picture")
     public ResponseEntity<String> removeProfilePicture(@PathVariable Long id) {
         Optional<CustomerProfile> customer = repository.findById(id);
@@ -84,13 +78,12 @@ public class CustomerProfilePictureController {
         CustomerProfile profile = customer.get();
         String filePath = profile.getProfilePictureUrl().replaceFirst("/", "");
 
-        // ✅ Delete the file from storage
+        //deleting the file from storage
         File file = new File(filePath);
         if (file.exists()) {
             file.delete();
         }
 
-        // ✅ Remove reference from database
         profile.setProfilePictureUrl(null);
         repository.save(profile);
 

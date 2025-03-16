@@ -14,14 +14,12 @@ public class Tour {
     private String destination;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String status; // "upcoming" or "completed"
-    private double price; // Price of the tour
-    private LocalDate bookedOn; // Date when the tour was booked
+    private String status;
+    private double price;
+    private LocalDate bookedOn;
 
-    // No-args constructor (required by JPA)
     public Tour() {}
 
-    // All-args constructor
     public Tour(Long id, Long customerId, String destination, LocalDate startDate, LocalDate endDate, String status, double price, LocalDate bookedOn) {
         this.id = id;
         this.customerId = customerId;
@@ -33,7 +31,6 @@ public class Tour {
         this.bookedOn = bookedOn;
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

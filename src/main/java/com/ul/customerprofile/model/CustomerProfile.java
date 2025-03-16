@@ -23,32 +23,28 @@ public class CustomerProfile {
     @Column(name = "preference_value")
     private Map<String, String> preferences = new HashMap<>();
 
-    // ✅ No-Args Constructor (Required by JPA)
     public CustomerProfile() {}
 
-    // ✅ Constructor Without Preferences (Added missing one!)
     public CustomerProfile(Long id, String name, String email, String phone, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
-        this.profilePictureUrl = null; // Default to null
+        this.profilePictureUrl = null;
         this.preferences = new HashMap<>();
     }
 
-    // ✅ Constructor With Preferences (The one needed for CustomerProfileApplication.java)
     public CustomerProfile(Long id, String name, String email, String phone, String password, Map<String, String> preferences) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
-        this.profilePictureUrl = null; // Default to null
+        this.profilePictureUrl = null;
         this.preferences = preferences != null ? preferences : new HashMap<>();
     }
 
-    // ✅ Constructor With Profile Picture Support
     public CustomerProfile(Long id, String name, String email, String phone, String password, String profilePictureUrl, Map<String, String> preferences) {
         this.id = id;
         this.name = name;
@@ -59,7 +55,6 @@ public class CustomerProfile {
         this.preferences = preferences != null ? preferences : new HashMap<>();
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }

@@ -34,17 +34,9 @@ public class CustomerProfileController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CustomerProfile> getProfileById(@PathVariable Long id) {
-        //return service.getProfileById(id)
-               // .map(ResponseEntity::ok)
-               // .orElse(ResponseEntity.notFound().build());
         Optional<CustomerProfile> profile = repository.findById(id);
         return profile.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-
-    //@PostMapping
-    //public CustomerProfile createProfile(@RequestBody CustomerProfile profile) {
-    //    return service.createProfile(profile);
-    //}
     
     @PostMapping
     public ResponseEntity<?> createProfile(@RequestBody CustomerProfile profile) {
@@ -61,7 +53,7 @@ public class CustomerProfileController {
         return repository.findById(id).map(profile -> {
             profile.setName(updatedProfile.getName());
             profile.setPhone(updatedProfile.getPhone());
-            profile.setPassword(updatedProfile.getPassword());  // Ensure passwords are securely hashed in production
+            profile.setPassword(updatedProfile.getPassword());
             return ResponseEntity.ok(repository.save(profile));
         }).orElse(ResponseEntity.notFound().build());
     }
@@ -72,9 +64,9 @@ public class CustomerProfileController {
         Optional<CustomerProfile> customer = service.login(profile.getEmail(), profile.getPassword());
 
         if (customer.isPresent()) {
-            return ResponseEntity.ok(customer.get()); // Return valid customer profile
+            return ResponseEntity.ok(customer.get()); // this returns a valid customer profile
         } else {
-            return ResponseEntity.status(401).body("Invalid credentials"); // Return error message
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
     }
     
@@ -104,10 +96,5 @@ public class CustomerProfileController {
         List<Tour> upcomingTours = tourRepository.findByCustomerIdAndStatus(id, "Upcoming");
         return ResponseEntity.ok(upcomingTours);
     }
-
-
-
-
-
 }
 
