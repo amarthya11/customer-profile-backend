@@ -5,6 +5,7 @@ import com.ul.customerprofile.model.Tour;
 import com.ul.customerprofile.repository.CustomerProfileRepository;
 import com.ul.customerprofile.repository.TourRepository;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,9 +14,12 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
 public class CustomerProfileApplication {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerProfileApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(CustomerProfileApplication.class, args);
@@ -34,7 +38,7 @@ public class CustomerProfileApplication {
                 );
 
                 repository.save(admin);
-                System.out.println("Default admin user created: admin@gmail.com / admin123");
+                logger.info("Default admin user created: admin@gmail.com / admin123");
             }
 
             if (tourRepository.count() == 0) {
@@ -42,9 +46,9 @@ public class CustomerProfileApplication {
                 tourRepository.save(new Tour(null, 1L, "Tokyo", LocalDate.of(2025, 5, 15), LocalDate.of(2025, 5, 22), "Upcoming", 1500.0, LocalDate.of(2025, 3, 10)));
                 tourRepository.save(new Tour(null, 1L, "New York", LocalDate.of(2024, 12, 10), LocalDate.of(2024, 12, 17), "Completed", 1000.0, LocalDate.of(2024, 11, 1)));
 
-                System.out.println("Sample tour data added.");
+                logger.info("Sample tour data added.");
             } else {
-                System.out.println("Sample tour data already exists");
+                logger.info("Sample tour data already exists");
             }
         };
     }

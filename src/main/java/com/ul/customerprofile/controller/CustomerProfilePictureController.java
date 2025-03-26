@@ -2,6 +2,8 @@ package com.ul.customerprofile.controller;
 
 import com.ul.customerprofile.model.CustomerProfile;
 import com.ul.customerprofile.repository.CustomerProfileRepository;
+
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,10 +16,15 @@ import java.util.Optional;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/customers")
 @CrossOrigin(origins = "http://localhost:3000")
 public class CustomerProfilePictureController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CustomerProfilePictureController.class);
 
     private static final String UPLOAD_DIR = "uploads/";
 
@@ -51,10 +58,10 @@ public class CustomerProfilePictureController {
             profile.setProfilePictureUrl("/uploads/" + fileName);
             repository.save(profile);
 
-            System.out.println("File uploaded successfully: " + filePath); // Debugging
+            logger.info("File uploaded successfully: {}", filePath);
             return ResponseEntity.ok("/uploads/" + fileName);
         } catch (IOException e) {
-            System.err.println("Error uploading file: " + e.getMessage()); // Debugging
+            logger.error("Error uploading file: {}", e.getMessage());
             return ResponseEntity.internalServerError().body("Error uploading file: " + e.getMessage());
         }
     }

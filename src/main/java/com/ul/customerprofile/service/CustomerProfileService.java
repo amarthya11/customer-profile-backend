@@ -2,12 +2,17 @@ package com.ul.customerprofile.service;
 
 import com.ul.customerprofile.model.CustomerProfile;
 import com.ul.customerprofile.repository.CustomerProfileRepository;
+
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class CustomerProfileService {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerProfileService.class);
 
     private final CustomerProfileRepository repository;
 
@@ -34,9 +39,7 @@ public class CustomerProfileService {
     public Optional<CustomerProfile> login(String email, String password) {
         return repository.findByEmail(email)
                 .filter(customer -> {
-                    System.out.println("Check login for email: " + email);
-                    System.out.println("Database password: " + customer.getPassword());
-                    System.out.println("Entered password: " + password);
+                    logger.debug("Login attempt for email: {}", email);
                     return customer.getPassword().equals(password);
                 });
     }
