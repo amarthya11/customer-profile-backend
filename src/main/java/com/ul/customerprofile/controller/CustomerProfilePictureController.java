@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -43,7 +42,7 @@ public class CustomerProfilePictureController {
         }
 
         try {
-            String uploadDir = System.getProperty("user.dir") + "/uploads/";
+            String uploadDir = System.getProperty("user.dir") + "/" + UPLOAD_DIR;
             File uploadDirFile = new File(uploadDir);
             if (!uploadDirFile.exists()) {
                 uploadDirFile.mkdirs();
@@ -55,11 +54,11 @@ public class CustomerProfilePictureController {
             file.transferTo(filePath.toFile());
 
             CustomerProfile profile = customer.get();
-            profile.setProfilePictureUrl("/uploads/" + fileName);
+            profile.setProfilePictureUrl("/" + UPLOAD_DIR + fileName);
             repository.save(profile);
 
             logger.info("File uploaded successfully: {}", filePath);
-            return ResponseEntity.ok("/uploads/" + fileName);
+            return ResponseEntity.ok("/" + UPLOAD_DIR + fileName);
         } catch (IOException e) {
             logger.error("Error uploading file: {}", e.getMessage());
             return ResponseEntity.internalServerError().body("Error uploading file: " + e.getMessage());
@@ -85,12 +84,12 @@ public class CustomerProfilePictureController {
         }
 
         CustomerProfile profile = customer.get();
-        String filePath = profile.getProfilePictureUrl().replaceFirst("/", "");
+        String filePath = profile.getProfilePictureUrl().replaceFirst("/" + UPLOAD_DIR, "");
 
         //deleting the file from storage
         File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();
+        if (file.exists() && !file.delete()) {  // ← Checks return value
+            logger.warn("Failed to delete file: {}", filePath);
         }
 
         profile.setProfilePictureUrl(null);
