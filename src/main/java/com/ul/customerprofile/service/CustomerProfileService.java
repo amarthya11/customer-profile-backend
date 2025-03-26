@@ -9,8 +9,14 @@ import java.util.Optional;
 
 @Service
 public class CustomerProfileService {
-    @Autowired
-    private CustomerProfileRepository repository;
+    /*@Autowired
+    private CustomerProfileRepository repository;*/
+
+    private final CustomerProfileRepository repository;
+
+    public CustomerProfileService(CustomerProfileRepository repository) {
+        this.repository = repository;
+    }
 
     public List<CustomerProfile> getAllProfiles() {
         return repository.findAll(); 

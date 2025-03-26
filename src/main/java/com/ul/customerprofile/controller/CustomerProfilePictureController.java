@@ -22,8 +22,14 @@ public class CustomerProfilePictureController {
 
     private static final String UPLOAD_DIR = "uploads/";
 
-    @Autowired
-    private CustomerProfileRepository repository;
+    /*@Autowired
+    private CustomerProfileRepository repository;*/
+
+    private final CustomerProfileRepository repository;
+
+    public CustomerProfilePictureController(CustomerProfileRepository repository) {
+        this.repository = repository;
+    }
 
     //API to upload profile picture
     @PostMapping("/{id}/upload-profile-picture")
