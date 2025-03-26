@@ -2,15 +2,12 @@ package com.ul.customerprofile.service;
 
 import com.ul.customerprofile.model.CustomerProfile;
 import com.ul.customerprofile.repository.CustomerProfileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CustomerProfileService {
-    /*@Autowired
-    private CustomerProfileRepository repository;*/
 
     private final CustomerProfileRepository repository;
 

@@ -2,7 +2,6 @@ package com.ul.customerprofile.controller;
 
 import com.ul.customerprofile.model.CustomerProfile;
 import com.ul.customerprofile.repository.CustomerProfileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,9 +20,6 @@ import java.nio.charset.StandardCharsets;
 public class CustomerProfilePictureController {
 
     private static final String UPLOAD_DIR = "uploads/";
-
-    /*@Autowired
-    private CustomerProfileRepository repository;*/
 
     private final CustomerProfileRepository repository;
 

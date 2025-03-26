@@ -8,6 +8,8 @@ class CustomerProfileApplicationTests {
 
 	@Test
 	void contextLoads() {
+	// Test validates Spring context loads successfully
+    // No implementation needed for smoke test
 	}
 
 }

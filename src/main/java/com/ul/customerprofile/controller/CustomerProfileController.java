@@ -18,19 +18,6 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000")  
 public class CustomerProfileController {
     
-    /*@Autowired
-    private CustomerProfileService service;
-    
-    @Autowired
-    private CustomerProfileRepository repository;
-    
-    @Autowired
-    private TourRepository tourRepository;*/
-
-    // Remove these autowired fields:
-
-
-// Replace with constructor injection:
     private final CustomerProfileService service;
     private final CustomerProfileRepository repository;
     private final TourRepository tourRepository;
