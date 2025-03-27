@@ -6,17 +6,21 @@ import com.ul.customerprofile.repository.CustomerProfileRepository;
 import com.ul.customerprofile.repository.TourRepository;
 import com.ul.customerprofile.service.CustomerProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/customers")
 @CrossOrigin(origins = "http://localhost:3000")  
 public class CustomerProfileController {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerProfileController.class);
     
     private final CustomerProfileService service;
     private final CustomerProfileRepository repository;
@@ -41,12 +45,14 @@ public class CustomerProfileController {
     }
     
     @PostMapping
-    public ResponseEntity<?> createProfile(@RequestBody CustomerProfile profile) {
+    public ResponseEntity<CustomerProfile> createProfile(@RequestBody CustomerProfile profile) {
         try {
             CustomerProfile savedProfile = service.createProfile(profile);
             return ResponseEntity.ok(savedProfile);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            logger.error("Profile creation failed: {}", e.getMessage());
+            return ResponseEntity.badRequest()
+                .body(new CustomerProfile()); // Empty profile as error indicator
         }
     }
     
@@ -62,15 +68,17 @@ public class CustomerProfileController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody CustomerProfile profile) {
-        Optional<CustomerProfile> customer = service.login(profile.getEmail(), profile.getPassword());
-
-        if (customer.isPresent()) {
-            return ResponseEntity.ok(customer.get()); // this returns a valid customer profile
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
-    }
+    public ResponseEntity<CustomerProfile> login(@RequestBody CustomerProfile profile) {
+    Optional<CustomerProfile> customer = service.login(profile.getEmail(), profile.getPassword());
+    
+    return customer
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> {
+            logger.warn("Login failed for email: {}", profile.getEmail());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new CustomerProfile()); // Empty profile for failed auth
+        });
+}
     
     @PutMapping("/{id}/preferences")
     public ResponseEntity<CustomerProfile> updatePreferences(@PathVariable Long id, @RequestBody Map<String, String> newPreferences) {

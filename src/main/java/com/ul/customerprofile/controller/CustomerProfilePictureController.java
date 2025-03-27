@@ -84,7 +84,7 @@ public class CustomerProfilePictureController {
         }
 
         CustomerProfile profile = customer.get();
-        String filePath = profile.getProfilePictureUrl().replaceFirst("/" + UPLOAD_DIR, "");
+        String filePath = profile.getProfilePictureUrl().replaceFirst(File.separator + UPLOAD_DIR, "");
 
         //deleting the file from storage
         File file = new File(filePath);
