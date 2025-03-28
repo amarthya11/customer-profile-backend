@@ -9,7 +9,6 @@ public class Tour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long customerId;
     private String destination;
     private LocalDate startDate;
@@ -18,8 +17,14 @@ public class Tour {
     private double price;
     private LocalDate bookedOn;
 
-    public static class Builder {
-        // All fields from Tour class
+    // ======================
+    // Builder Implementation
+    // ======================
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
         private Long id;
         private Long customerId;
         private String destination;
@@ -29,7 +34,6 @@ public class Tour {
         private double price;
         private LocalDate bookedOn;
 
-        // Builder methods for each field
         public Builder id(Long id) {
             this.id = id;
             return this;
@@ -64,25 +68,37 @@ public class Tour {
         }
 
         public Tour build() {
-            return new Tour(this);
+            Tour tour = new Tour();
+            tour.id = this.id;
+            tour.customerId = this.customerId;
+            tour.destination = this.destination;
+            tour.startDate = this.startDate;
+            tour.endDate = this.endDate;
+            tour.status = this.status;
+            tour.price = this.price;
+            tour.bookedOn = this.bookedOn;
+            return tour;
         }
     }
 
+    // ======================
+    // Constructors
+    // ======================
+    /**
+     * @deprecated (since = "1.0.0", forRemoval = true) 
+     * Use {@link Tour#builder()} instead.
+     */
+    @Deprecated(since = "1.0.0", forRemoval = true)
     protected Tour() {}
 
-    private Tour(Builder builder) {
-        this.id = builder.id;
-        this.customerId = builder.customerId;
-        this.destination = builder.destination;
-        this.startDate = builder.startDate;
-        this.endDate = builder.endDate;
-        this.status = builder.status;
-        this.price = builder.price;
-        this.bookedOn = builder.bookedOn;
-    }
-
-    @Deprecated
-    public Tour(Long id, Long customerId, String destination, LocalDate startDate, LocalDate endDate, String status, double price, LocalDate bookedOn) {
+    /**
+     * @deprecated (since = "1.0.0", forRemoval = true) 
+     * Use {@link Tour#builder()} instead.
+     */
+    @Deprecated(since = "1.0.0", forRemoval = true)
+    public Tour(Long id, Long customerId, String destination, 
+               LocalDate startDate, LocalDate endDate,
+               String status, double price, LocalDate bookedOn) {
         this.id = id;
         this.customerId = customerId;
         this.destination = destination;
@@ -93,6 +109,9 @@ public class Tour {
         this.bookedOn = bookedOn;
     }
 
+    // ======================
+    // Getters and Setters
+    // ======================
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
