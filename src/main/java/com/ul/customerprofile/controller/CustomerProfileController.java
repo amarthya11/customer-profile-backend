@@ -50,11 +50,13 @@ public class CustomerProfileController {
             CustomerProfile savedProfile = service.createProfile(profile);
             return ResponseEntity.ok(savedProfile);
         } catch (RuntimeException e) {
-            logger.error("Profile creation failed: {}", e.getMessage());
-            return ResponseEntity.badRequest()
-                .body(new CustomerProfile()); // Empty profile as error indicator
+            logger.error("Profile creation failed"); // ← Generic message
+        if (logger.isDebugEnabled()) {
+            logger.debug("Creation error: {}", e.getClass().getSimpleName()); // ← Only log error type
         }
+        return ResponseEntity.badRequest().body(new CustomerProfile());
     }
+}
     
     @PutMapping("/{id}")
     public ResponseEntity<CustomerProfile> updateProfile(@PathVariable Long id, @RequestBody CustomerProfile updatedProfile) {
@@ -69,12 +71,17 @@ public class CustomerProfileController {
 
     @PostMapping("/login")
     public ResponseEntity<CustomerProfile> login(@RequestBody CustomerProfile profile) {
+        logger.debug("Authentication attempt"); // Generic message
     Optional<CustomerProfile> customer = service.login(profile.getEmail(), profile.getPassword());
     
     return customer
         .map(ResponseEntity::ok)
         .orElseGet(() -> {
-            logger.warn("Login failed for email: {}", profile.getEmail());
+            logger.warn("Authentication failed"); // ← Generic message
+            if (logger.isTraceEnabled()) { // Only log details in trace mode
+                logger.trace("Failed login attempt for: {}", 
+                    profile.getEmail().replaceAll("(?<=.).(?=.*@)", "*")); // Obscured email
+            }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new CustomerProfile()); // Empty profile for failed auth
         });

@@ -1,5 +1,6 @@
 package com.ul.customerprofile.service;
 
+import com.ul.customerprofile.exception.EmailExistsException;
 import com.ul.customerprofile.model.CustomerProfile;
 import com.ul.customerprofile.repository.CustomerProfileRepository;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
+import com.ul.customerprofile.exception.EmailExistsException;
 
 @Service
 public class CustomerProfileService {
@@ -30,7 +32,7 @@ public class CustomerProfileService {
     public CustomerProfile createProfile(CustomerProfile profile) {
         //checking if the email already exists
         if (repository.findByEmail(profile.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailExistsException(profile.getEmail());// Custom exception
         }
         return repository.save(profile);
     }
